@@ -4,9 +4,16 @@ Gets updates from ds3club.com and posts them in a discord channel
 
 ## Getting Started
 
-Clone the repo.
+This project is Python 3.6, and uses pipenv.
 
-`pip install -p`
+Python 3: http://bfy.tw/GojO
+Pipenv: http://bfy.tw/GojW
+
+Make sure you have both installed and then run:
+
+`pipenv install --three
+pipenv shell
+python ds3-forum-discord-bot.py`
 
 Off you go!
 

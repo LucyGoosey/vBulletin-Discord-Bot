@@ -48,8 +48,6 @@ async def check_posts():
     global channel
     global last_post
 
-    print("Checking")
-
     r = requests.get("http://www.ds3club.co.uk/external?type=rss2&nodeid=2")
     newest_item = ElementTree.fromstring(r.content)[0].find("item")
 
@@ -65,7 +63,6 @@ async def check_posts():
             new_post.link = child.text
 
     if last_post != new_post:
-        print("Sending message")
         await client.send_message(channel, new_post.message())
         last_post = new_post
 
@@ -77,8 +74,9 @@ async def on_ready():
 
     print("DS3club Update Bot Running!")
     print("On Server: {0}\n"
-          "In Channel: {1}"
-          .format(channel.server, channel.name))
+          "In Channel: {1}\n"
+          "Can send messages? {2}"
+          .format(channel.server, channel.name, channel.permissions_for(channel.server.me).send_messages))
 
     while True:
         await check_posts()
