@@ -1,27 +1,14 @@
-# DS3Club-Discord-Bot
+# vBulletin-Discord-Bot
 
-Gets updates from ds3club.com and posts them in a discord channel
-
-## Getting Started
-
-This project is Python 3.6, and uses pipenv.
-
-Python 3: http://bfy.tw/GojO
-Pipenv: http://bfy.tw/GojW
-
-Make sure you have both installed and then run:
-
-`pipenv install --three
-pipenv shell
-python ds3-forum-discord-bot.py`
-
-Off you go!
+Gets updates from a vBulletin RSS feed and posts them in a discord channel.
 
 ## Setup
 
 Get a bot token and a channel ID by following the instructions found at: https://github.com/Chikachi/DiscordIntegration/wiki/How-to-get-a-token-and-channel-ID-for-Discord
 
-Alter the [config.json](config.json) file to include this bot token and channel id.
+Also enable the RSS feed for your vBulletin board, and get the URL. See: http://bfy.tw/GpLA
+
+Alter the [config.json](config.json) file to include this bot token, channel id, and RSS feed URL.
 
 eg.
 
@@ -29,11 +16,27 @@ eg.
 {
   "bot_token": "some.token.fromDiscord",
   "channel_id": "1234567890",
-  "update_frequency": "60"
+  "update_frequency": "60",
+  "rss_feed_url": "https://my.forum-url.com/external.php?type=rss
 }
 ```
 
 You can change `update_frequency` to change how often the forum is polled, this value is in seconds.
+
+## Running the Script
+
+This project is Python >3.4, and uses pipenv.
+
+Python 3: http://bfy.tw/GojO
+Pipenv: http://bfy.tw/GojW
+
+Make sure you have both installed and then run:
+
+`pipenv install
+pipenv shell
+python vbulletin-discord-bot.py`
+
+Off you go!
 
 ## License
 

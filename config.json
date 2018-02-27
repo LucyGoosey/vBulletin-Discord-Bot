@@ -1,5 +1,7 @@
 {
-  "bot_token": "INSERT-BOT-TOKEN-HERE",
-  "channel_id": "INSERT-CHANNEL-ID-HERE",
-  "update_frequency": "60"
+  "bot_token": "INSERT-BOT-TOKEN",
+  "channel_id": "INSERT-CHANNEL-ID",
+  "update_frequency": "60",
+  "rss_feed_url": "INSERT-RSS-FEED-URL"
+
 }
