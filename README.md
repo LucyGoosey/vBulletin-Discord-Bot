@@ -17,7 +17,8 @@ eg.
   "bot_token": "some.token.fromDiscord",
   "channel_id": "1234567890",
   "update_frequency": "60",
-  "rss_feed_url": "https://my.forum-url.com/external.php?type=rss
+  "rss_feed_url": "https://my.forum-url.com/external.php?type=rss",
+  "forum_name": "My Forum Name"
 }
 ```
 
@@ -28,13 +29,16 @@ You can change `update_frequency` to change how often the forum is polled, this 
 This project is Python >3.4, and uses pipenv.
 
 Python 3: http://bfy.tw/GojO
+
 Pipenv: http://bfy.tw/GojW
 
 Make sure you have both installed and then run:
 
-`pipenv install
+```
+pipenv install
 pipenv shell
-python vbulletin-discord-bot.py`
+python vbulletin-discord-bot.py
+```
 
 Off you go!
 
