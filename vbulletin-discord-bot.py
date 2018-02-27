@@ -19,6 +19,7 @@ class Post:
                "{3}\n" \
                "**Preview:**\n" \
                "{4}\n" \
+               "--------\n" \
                .format(
                    FORUM_NAME,
                    self.title,
