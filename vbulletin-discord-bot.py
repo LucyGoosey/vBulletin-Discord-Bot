@@ -13,13 +13,14 @@ class Post:
     date = ""
 
     def message(self):
-        return "`New Post on DS3Club.co.uk`\n" \
-               "**{0}** _by {1}_\n" \
+        return "`New Post on {0}`\n" \
+               "**{1}** _by {2}_\n" \
                "**Link:**\n" \
-               "{2}\n" \
-               "**Preview:**\n" \
                "{3}\n" \
+               "**Preview:**\n" \
+               "{4}\n" \
                .format(
+                   FORUM_NAME,
                    self.title,
                    self.author,
                    self.link,
@@ -44,6 +45,7 @@ BOT_TOKEN = None
 CHANNEL_ID = None
 UPDATE_FREQUENCY = None
 RSS_FEED_URL = None
+FORUM_NAME = ""
 
 ERROR_COLOUR = "\033[91m"
 
@@ -149,6 +151,12 @@ if __name__ == "__main__":
         RSS_FEED_URL = config["rss_feed_url"]
     else:
         print("No rss_feed_url defined in config.json")
+        exit(-1)
+
+    if "forum_name" in config.keys():
+        FORUM_NAME = config["forum_name"]
+    else:
+        print("No forum_name defined in config.json")
         exit(-1)
 
     try:

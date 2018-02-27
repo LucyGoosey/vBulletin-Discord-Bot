@@ -2,6 +2,6 @@
   "bot_token": "INSERT-BOT-TOKEN",
   "channel_id": "INSERT-CHANNEL-ID",
   "update_frequency": "60",
-  "rss_feed_url": "INSERT-RSS-FEED-URL"
-
+  "rss_feed_url": "INSERT-RSS-FEED-URL",
+  "forum_name": "INSERT-FORUM-NAME"
 }
