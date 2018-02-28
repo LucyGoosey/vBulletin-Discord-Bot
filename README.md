@@ -42,6 +42,12 @@ python vbulletin-discord-bot.py
 
 Off you go!
 
+## Example
+
+The bot will make a discord post similar to the below when a new forum post is made:
+
+![Example image](ExamplePost.png)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
