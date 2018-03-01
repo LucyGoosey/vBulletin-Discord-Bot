@@ -1,7 +1,8 @@
+import os
 import discord
 import requests
 import asyncio
-import json
+import configparser
 from xml.etree import ElementTree
 
 
@@ -13,15 +14,7 @@ class Post:
     date = ""
 
     def message(self):
-        return "`New Post on {0}`\n" \
-               "**{1}** _by {2}_\n" \
-               "**Link:**\n" \
-               "{3}\n" \
-               "**Preview:**\n" \
-               "{4}\n" \
-               "--------\n" \
-               .format(
-                   FORUM_NAME,
+        return MESSAGE_FORMAT.format(
                    self.title,
                    self.author,
                    self.link,
@@ -32,7 +25,6 @@ class Post:
         equal = self.title == other.title
         equal &= self.author == other.author
         equal &= self.link == other.link
-        equal &= self.preview == other.preview
         equal &= self.date == other.date
         return equal
 
@@ -46,7 +38,6 @@ BOT_TOKEN = None
 CHANNEL_ID = None
 UPDATE_FREQUENCY = None
 RSS_FEED_URL = None
-FORUM_NAME = ""
 
 ERROR_COLOUR = "\033[91m"
 
@@ -62,7 +53,7 @@ def check_posts():
     except requests.ConnectionError:
         print(ERROR_COLOUR)
         print("Failed to connect to: {0}".format(RSS_FEED_URL))
-        print("Please check the the rss_feed_url provided in config.json to ensure it is correct.")
+        print("Please check the the rss_feed_url provided in config.ini to ensure it is correct.")
         return
 
     newest_item = ElementTree.fromstring(r.content)[0].find("item")
@@ -85,7 +76,7 @@ def check_posts():
             yield from client.send_message(channel, new_post.message())
             print("Sending message:")
             print(new_post.message())
-            print("---------------")
+            print("\n---------------\n")
         except discord.errors.Forbidden:
             print(ERROR_COLOUR)
             print("Your bot doesn't have permission to send messages!")
@@ -106,7 +97,7 @@ def on_ready():
     if not channel:
         print(ERROR_COLOUR)
         print("Cannot find a channel with channel ID: {0}".format(CHANNEL_ID))
-        print("Please check the the channel_id provided in config.json to ensure it is correct.")
+        print("Please check the the channel_id provided in config.ini to ensure it is correct.")
         print("Also ensure your bot has been added to the server correctly,"
               " you should be able to see them in the members list.")
         return
@@ -127,43 +118,61 @@ def on_ready():
 
 
 if __name__ == "__main__":
-    with open('config.json') as cfg:
-        config = json.load(cfg)
+    config = configparser.ConfigParser()
 
-    if "bot_token" in config.keys():
-        BOT_TOKEN = config["bot_token"]
+    if os.path.isfile("config.override.ini"):
+        config.read("config.override.ini")
+    elif os.path.isfile("config.ini"):
+        config.read("config.ini")
     else:
-        print("No bot_token defined in config.json")
+        print(ERROR_COLOUR)
+        print("No config.ini found!")
         exit(-1)
 
-    if "channel_id" in config.keys():
-        CHANNEL_ID = config["channel_id"]
+    options = config.options("Options")
+
+    if "bot_token" in options:
+        BOT_TOKEN = config.get("Options", "bot_token")
     else:
-        print("No channel_id defined in config.json")
+        print("No bot_token defined in config.ini")
         exit(-1)
 
-    if "update_frequency" in config.keys():
-        UPDATE_FREQUENCY = float(config["update_frequency"])
+    if "channel_id" in options:
+        CHANNEL_ID = config.get("Options", "channel_id")
     else:
-        print("No update_frequency defined in config.json")
+        print("No channel_id defined in config.ini")
         exit(-1)
 
-    if "rss_feed_url" in config.keys():
-        RSS_FEED_URL = config["rss_feed_url"]
+    if "update_frequency" in options:
+        UPDATE_FREQUENCY = config.getfloat("Options", "update_frequency")
     else:
-        print("No rss_feed_url defined in config.json")
+        print("No update_frequency defined in config.ini")
         exit(-1)
 
-    if "forum_name" in config.keys():
-        FORUM_NAME = config["forum_name"]
+    if "rss_feed_url" in options:
+        RSS_FEED_URL = config.get("Options", "rss_feed_url")
     else:
-        print("No forum_name defined in config.json")
+        print("No rss_feed_url defined in config.ini")
         exit(-1)
+
+    if "message_format" in options:
+        MESSAGE_FORMAT = config.get("Options", "message_format")
+        MESSAGE_FORMAT = MESSAGE_FORMAT.replace("{post_title}", "{0}")
+        MESSAGE_FORMAT = MESSAGE_FORMAT.replace("{post_author}", "{1}")
+        MESSAGE_FORMAT = MESSAGE_FORMAT.replace("{post_link}", "{2}")
+        MESSAGE_FORMAT = MESSAGE_FORMAT.replace("{post_preview}", "{3}")
+    else:
+        MESSAGE_FORMAT = "`New Forum Post`\n" \
+               "**{0}** _by {1}_\n" \
+               "**Link:** {2}\n" \
+               "**Preview:**\n" \
+               "{3}\n" \
+               "--------"
 
     try:
         client.run(BOT_TOKEN)
     except discord.errors.LoginFailure:
         print(ERROR_COLOUR)
         print("Invalid bot token provided!")
-        print("Please check the bot_token provided in config.json to ensure it is correct.")
+        print("Please check the bot_token provided in config.ini to ensure it is correct.")
         exit(-1)
