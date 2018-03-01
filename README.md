@@ -8,21 +8,39 @@ Get a bot token and a channel ID by following the instructions found at: https:/
 
 Also enable the RSS feed for your vBulletin board, and get the URL. See: http://bfy.tw/GpLA
 
-Alter the [config.json](config.json) file to include this bot token, channel id, and RSS feed URL.
+Alter the [config.ini](config.ini) file to include this bot token, channel id, and RSS feed URL.
 
 eg.
 
 ```buildoutcfg
-{
-  "bot_token": "some.token.fromDiscord",
-  "channel_id": "1234567890",
-  "update_frequency": "60",
-  "rss_feed_url": "https://my.forum-url.com/external.php?type=rss",
-  "forum_name": "My Forum Name"
-}
+[Options]
+update_frequency = 60
+bot_token = my.bot.token
+channel_id = 0123456789012345
+rss_feed_url = http://my-forum.com/external?type=rss2
+message_format = `New Post on MyForum!`
+    **{post_title}** _by {post_author}_
+    **Link:** {post_link}
+    **Preview:**
+    {post_preview}
 ```
 
 You can change `update_frequency` to change how often the forum is polled, this value is in seconds.
+
+The message format defines what the bot will post in discord. The options in curly brackets, {}, will be replaced as follows:
+
+| Option | Replacement |
+| --- | --- |
+| {post_title} | The title of the post |
+| {post_author} | The author of the post |
+| {post_link} | A link to the post |
+| {post_preview} | A small preview of the post |
+
+You can format the messages as you like, for example if you just want the post title and a preview:
+
+```buildoutcfg
+message_format = {post_title} - {post_preview}
+```
 
 ## Running the Script
 
@@ -47,6 +65,10 @@ Off you go!
 The bot will make a discord post similar to the below when a new forum post is made:
 
 ![Example image](ExamplePost.png)
+
+## Questions/Help
+
+Feel free to contact me on discord `@Quidoigo` with any questions!
 
 ## License
 
