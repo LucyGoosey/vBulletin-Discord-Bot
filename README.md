@@ -15,6 +15,7 @@ eg.
 ```buildoutcfg
 [Options]
 update_frequency = 60
+multi_line = true
 bot_token = my.bot.token
 channel_id = 0123456789012345
 rss_feed_url = http://my-forum.com/external?type=rss2
@@ -41,6 +42,8 @@ You can format the messages as you like, for example if you just want the post t
 ```buildoutcfg
 message_format = {post_title} - {post_preview}
 ```
+
+If you have newlines in your message format
 
 ## Running the Script
 
