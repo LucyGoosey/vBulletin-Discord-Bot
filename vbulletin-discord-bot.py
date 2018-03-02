@@ -3,6 +3,7 @@ import discord
 import requests
 import asyncio
 import configparser
+import datetime
 from xml.etree import ElementTree
 
 
@@ -21,21 +22,14 @@ class Post:
                    self.preview
                )
 
-    def __eq__(self, other):
-        if not other:
-            return False
-
-        equal = self.title == other.title
-        equal &= self.author == other.author
-        equal &= self.link == other.link
-        equal &= self.date == other.date
-        return equal
+    def date_as_datetime(self):
+        return datetime.datetime.strptime(self.date, "%a, %d %b %Y %H:%M:%S %Z")
 
 
 client = discord.Client()
 channel = None
 config = None
-last_post = None
+last_time = None
 
 BOT_TOKEN = None
 CHANNEL_ID = None
@@ -84,46 +78,48 @@ def make_discord_post(post):
 
 @asyncio.coroutine
 def single_post(items):
-    global last_post
+    global last_time
 
     for item in items:
         new_post = item_to_post(item)
 
-        if new_post != last_post:
+        post_time = new_post.date_as_datetime()
+        if post_time > last_time:
             yield from make_discord_post(new_post)
-            last_post = new_post
+            last_time = post_time
             return
 
 
 @asyncio.coroutine
 def multi_post(items):
-    global last_post
+    global last_time
 
-    to_post = []
-    for item in items:
-        new_post = item_to_post(item)
+    to_post = []    # type: list[Post]
 
-        if new_post != last_post:
-            to_post.append(new_post)
-        else:
-            break
+    if not last_time:
+        to_post.append(item_to_post(items[0]))
+    else:
+        for item in items:
+            new_post = item_to_post(item)
+            post_time = new_post.date_as_datetime()
+
+            if post_time > last_time:
+                to_post.append(new_post)
+            else:
+                break
 
     if to_post:
-        if not last_post:
-            to_post = to_post[:1]
-
         to_post.reverse()
         for post in to_post:
             yield from make_discord_post(post)
 
-        last_post = to_post[-1]
+        last_time = to_post[-1].date_as_datetime()
 
 
 @asyncio.coroutine
 def check_posts():
     global client
     global channel
-    global last_post
 
     try:
         r = requests.get(RSS_FEED_URL)
