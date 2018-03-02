@@ -1,39 +1,91 @@
-# DS3Club-Discord-Bot
+# vBulletin-Discord-Bot
 
-Gets updates from ds3club.com and posts them in a discord channel
-
-## Getting Started
-
-This project is Python 3.6, and uses pipenv.
-
-Python 3: http://bfy.tw/GojO
-Pipenv: http://bfy.tw/GojW
-
-Make sure you have both installed and then run:
-
-`pipenv install --three
-pipenv shell
-python ds3-forum-discord-bot.py`
-
-Off you go!
+Gets updates from a vBulletin RSS feed and posts them in a discord channel.
 
 ## Setup
 
 Get a bot token and a channel ID by following the instructions found at: https://github.com/Chikachi/DiscordIntegration/wiki/How-to-get-a-token-and-channel-ID-for-Discord
 
-Alter the [config.json](config.json) file to include this bot token and channel id.
+Also enable the RSS feed for your vBulletin board, and get the URL. See: http://bfy.tw/GpLA
+
+Alter the [config.ini](config.ini) file to include this bot token, channel id, and RSS feed URL.
 
 eg.
 
 ```buildoutcfg
-{
-  "bot_token": "some.token.fromDiscord",
-  "channel_id": "1234567890",
-  "update_frequency": "60"
-}
+[Options]
+update_frequency = 60
+multi_line = true
+bot_token = my.bot.token
+channel_id = 0123456789012345
+rss_feed_url = http://my-forum.com/external?type=rss2
+message_format = `New Post on MyForum!`
+    **{post_title}** _by {post_author}_
+    **Link:** {post_link}
+    **Preview:**
+    {post_preview}
 ```
 
 You can change `update_frequency` to change how often the forum is polled, this value is in seconds.
+
+The message format defines what the bot will post in discord. The options in curly brackets, {}, will be replaced as follows:
+
+| Option | Replacement |
+| --- | --- |
+| {post_title} | The title of the post |
+| {post_author} | The author of the post |
+| {post_link} | A link to the post |
+| {post_preview} | A small preview of the post |
+
+You can format the messages as you like, for example if you just want the post title and a preview:
+
+```buildoutcfg
+message_format = {post_title} - {post_preview}
+```
+
+If you have newlines in your message format you will need to add a tab at the beginning of the line for the config file to corretly parse:
+
+Good:
+```
+message_format = First line!
+    Second Line...
+    ...Third line
+```
+
+Bad:
+```
+message_format = First line!
+Second line...
+...Third line
+```
+
+## Running the Script
+
+This project is Python >3.4, and uses pipenv.
+
+Python 3: http://bfy.tw/GojO
+
+Pipenv: http://bfy.tw/GojW
+
+Make sure you have both installed and then run:
+
+```
+pipenv install
+pipenv shell
+python vbulletin-discord-bot.py
+```
+
+Off you go!
+
+## Example
+
+The bot will make a discord post similar to the below when a new forum post is made:
+
+![Example image](ExamplePost.png)
+
+## Questions/Help
+
+Feel free to contact me on discord `@Quidoigo` with any questions!
 
 ## License
 
