@@ -43,7 +43,21 @@ You can format the messages as you like, for example if you just want the post t
 message_format = {post_title} - {post_preview}
 ```
 
-If you have newlines in your message format
+If you have newlines in your message format you will need to add a tab at the beginning of the line for the config file to corretly parse:
+
+Good:
+```
+message_format = First line!
+    Second Line...
+    ...Third line
+```
+
+Bad:
+```
+message_format = First line!
+Second line...
+...Third line
+```
 
 ## Running the Script
 
