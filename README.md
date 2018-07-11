@@ -61,18 +61,17 @@ Second line...
 
 ## Running the Script
 
-This project is Python >3.4, and uses pipenv.
+This project uses Python 3.4 and pipenv.
 
-Python 3: http://bfy.tw/GojO
+Python 3: https://www.python.org
 
-Pipenv: http://bfy.tw/GojW
+Pipenv: `pip install --user pipenv`
 
 Make sure you have both installed and then run:
 
 ```
 pipenv install
-pipenv shell
-python vbulletin-discord-bot.py
+pipenv run python vbulletin-discord-bot.py
 ```
 
 Off you go!

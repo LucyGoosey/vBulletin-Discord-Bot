@@ -1,5 +1,4 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
@@ -8,10 +7,8 @@ name = "pypi"
 python_version = "3.4"
 
 [packages]
-
 requests = "*"
 "discord.py" = "*"
-
+aiohttp = "==1.0.0"
 
 [dev-packages]
-
