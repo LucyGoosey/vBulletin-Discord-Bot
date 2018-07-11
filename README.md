@@ -84,7 +84,7 @@ The bot will make a discord post similar to the below when a new forum post is m
 
 ## Questions/Help
 
-Feel free to contact me on discord `@Quidoigo` with any questions!
+Feel free to contact me on discord `@Quidoigo#1893` with any questions, you can join my server here: https://discord.gg/2K7Xrw3
 
 ## License
 
