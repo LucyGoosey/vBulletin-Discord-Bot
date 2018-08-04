@@ -46,6 +46,17 @@ MESSAGE_FORMAT = "`New Forum Post`\n" \
 ERROR_COLOUR = "\033[91m"
 
 
+def safe_print(s):
+    try:
+        print(s)
+    except UnicodeEncodeError:
+        for c in s:
+            try:
+                print(c)
+            except UnicodeEncodeError:
+                print("?")
+
+
 def item_to_post(item):
     post = Post()
     for child in item:
@@ -67,7 +78,7 @@ def make_discord_post(post):
     try:
         yield from client.send_message(channel, post.message())
         print("Sending message:")
-        print(post.message())
+        safe_print(post.message())
         print("\n---------------\n")
     except discord.errors.Forbidden:
         print(ERROR_COLOUR)
@@ -125,7 +136,7 @@ def check_posts():
         r = requests.get(RSS_FEED_URL)
     except requests.ConnectionError:
         print(ERROR_COLOUR)
-        print("Failed to connect to: {0}".format(RSS_FEED_URL))
+        safe_print("Failed to connect to: {0}".format(RSS_FEED_URL))
         print("Please check the the rss_feed_url provided in config.ini to ensure it is correct.")
         return
 
@@ -146,21 +157,21 @@ def on_ready():
 
     if not channel:
         print(ERROR_COLOUR)
-        print("Cannot find a channel with channel ID: {0}".format(CHANNEL_ID))
+        safe_print("Cannot find a channel with channel ID: {0}".format(CHANNEL_ID))
         print("Please check the the channel_id provided in config.ini to ensure it is correct.")
         print("Also ensure your bot has been added to the server correctly,"
               " you should be able to see them in the members list.")
         return
 
     print("vBulletin Update Bot Running!")
-    print("On Server: {0}\n" 
-          "In Channel: {1}\n" 
-          "Querying URL: {2}\n" 
-          "Can send messages? {3}"
-          .format(channel.server,
-                  channel.name,
-                  RSS_FEED_URL,
-                  channel.permissions_for(channel.server.me).send_messages))
+    safe_print("On Server: {0}\n" 
+               "In Channel: {1}\n" 
+               "Querying URL: {2}\n" 
+               "Can send messages? {3}"
+               .format(channel.server,
+                       channel.name,
+                       RSS_FEED_URL,
+                       channel.permissions_for(channel.server.me).send_messages))
 
     while True:
         yield from check_posts()
