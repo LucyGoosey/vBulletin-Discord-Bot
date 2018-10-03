@@ -107,6 +107,10 @@ def multi_post(items):
 
     to_post = []    # type: list[Post]
 
+    # If there are no items we can't do anything, so return
+    if not items:
+        return
+
     if not last_time:
         to_post.append(item_to_post(items[0]))
     else:
