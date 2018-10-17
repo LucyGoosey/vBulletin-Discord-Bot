@@ -67,7 +67,9 @@ Python 3: https://www.python.org
 
 Pipenv: `pip install --user pipenv`
 
-Make sure you have both installed and then run:
+You can download python from the link above, and once python is installed you can run the command `pip install --user pipenv` from within a command-line/terminal to install pipenv.
+
+After Python and Pipenv are installed, open a command-line/terminal in the directory the code is based and run the following commands:
 
 ```
 pipenv install
