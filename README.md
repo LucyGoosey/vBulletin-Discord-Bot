@@ -43,7 +43,7 @@ You can format the messages as you like, for example if you just want the post t
 message_format = {post_title} - {post_preview}
 ```
 
-If you have newlines in your message format you will need to add a tab at the beginning of the line for the config file to corretly parse:
+If you have newlines in your message format you will need to add a tab at the beginning of the line for the config file to correctly parse:
 
 Good:
 ```
@@ -60,6 +60,16 @@ Second line...
 ```
 
 ## Running the Script
+
+### Windows
+
+If you're using Windows you can use the latest release here: https://github.com/LucyGoosey/vBulletin-Discord-Bot/releases/
+
+First edit the `config.ini` as described above, and then just run the `.exe` and off you go!
+
+If, when you run the `.exe`, the window immediately closes please try running the program from within a command prompt. The program is likely showing an error but the window is closing too quickly for it to be seen.
+
+### Everything Else
 
 This project uses Python 3.4 and pipenv.
 
