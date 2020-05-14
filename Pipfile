@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [requires]
-python_full_version = "3"
+python_version = "3.8"
 
 [packages]
 requests = "*"
 "discord.py" = "*"
-aiohttp = "==1.0.0"
+aiohttp = "*"
 
 [dev-packages]

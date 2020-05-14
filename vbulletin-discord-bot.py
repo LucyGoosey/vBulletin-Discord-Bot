@@ -28,7 +28,6 @@ class Post:
 
 client = discord.Client()
 channel = None
-config = None
 last_time = None
 
 BOT_TOKEN = None
@@ -73,10 +72,10 @@ def item_to_post(item):
     return post
 
 
-@asyncio.coroutine
-def make_discord_post(post):
+async def make_discord_post(post):
+    global channel
     try:
-        yield from client.send_message(channel, post.message())
+        await channel.send(post.message())
         print("Sending message:")
         safe_print(post.message())
         print("\n---------------\n")
@@ -87,8 +86,7 @@ def make_discord_post(post):
               "server/channel that allows it to send messages.")
 
 
-@asyncio.coroutine
-def single_post(items):
+async def single_post(items):
     global last_time
 
     for item in items:
@@ -96,13 +94,12 @@ def single_post(items):
 
         post_time = new_post.date_as_datetime()
         if post_time > last_time:
-            yield from make_discord_post(new_post)
+            await make_discord_post(new_post)
             last_time = post_time
             return
 
 
-@asyncio.coroutine
-def multi_post(items):
+async def multi_post(items):
     global last_time
 
     to_post = []    # type: list[Post]
@@ -126,13 +123,12 @@ def multi_post(items):
     if to_post:
         to_post.reverse()
         for post in to_post:
-            yield from make_discord_post(post)
+            await make_discord_post(post)
 
         last_time = to_post[-1].date_as_datetime()
 
 
-@asyncio.coroutine
-def check_posts():
+async def check_posts():
     global client
     global channel
 
@@ -147,17 +143,17 @@ def check_posts():
     items = ElementTree.fromstring(r.content)[0].findall("item")
 
     if not MULTI_POST:
-        yield from single_post(items)
+        await single_post(items)
     else:
-        yield from multi_post(items)
+        await multi_post(items)
 
 
 @client.event
-@asyncio.coroutine
-def on_ready():
+async def on_ready():
+    global client
     global channel
 
-    channel = client.get_channel(CHANNEL_ID)
+    channel = client.get_channel(int(CHANNEL_ID))
 
     if not channel:
         print(ERROR_COLOUR)
@@ -172,17 +168,18 @@ def on_ready():
                "In Channel: {1}\n" 
                "Querying URL: {2}\n" 
                "Can send messages? {3}"
-               .format(channel.server,
+               .format(channel.guild,
                        channel.name,
                        RSS_FEED_URL,
-                       channel.permissions_for(channel.server.me).send_messages))
+                       channel.permissions_for(channel.guild.me).send_messages))
 
     while True:
-        yield from check_posts()
-        yield from asyncio.sleep(UPDATE_FREQUENCY)
+        await check_posts()
+        await asyncio.sleep(UPDATE_FREQUENCY)
 
 
-if __name__ == "__main__":
+def read_config():
+    global BOT_TOKEN, CHANNEL_ID, UPDATE_FREQUENCY, RSS_FEED_URL, MESSAGE_FORMAT, MULTI_POST
     config = configparser.ConfigParser()
 
     try:
@@ -209,7 +206,7 @@ if __name__ == "__main__":
         exit(-1)
 
     if "channel_id" in options:
-        CHANNEL_ID = config.get("Options", "channel_id")
+        CHANNEL_ID = config.getint("Options", "channel_id")
     else:
         print("No channel_id defined in config.ini")
         exit(-1)
@@ -235,6 +232,10 @@ if __name__ == "__main__":
 
     if "multi_post" in options:
         MULTI_POST = config.get("Options", "multi_post").lower() == "true"
+
+
+if __name__ == "__main__":
+    read_config()
 
     try:
         client.run(BOT_TOKEN)

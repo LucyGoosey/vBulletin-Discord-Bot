@@ -72,7 +72,7 @@ You can download python from the link above, and once python is installed you ca
 After Python and Pipenv are installed, open a command-line/terminal in the directory the code is based and run the following commands:
 
 ```
-pipenv install
+pipenv install --ignore-pipfile
 pipenv run python vbulletin-discord-bot.py
 ```
 
