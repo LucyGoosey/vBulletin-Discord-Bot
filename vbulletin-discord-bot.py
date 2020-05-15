@@ -4,6 +4,7 @@ import requests
 import asyncio
 import configparser
 import datetime
+import locale
 from xml.etree import ElementTree
 
 
@@ -235,6 +236,8 @@ def read_config():
 
 
 if __name__ == "__main__":
+    locale.setlocale(locale.LC_ALL, "en_US")
+
     read_config()
 
     try:
