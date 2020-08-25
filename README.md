@@ -71,7 +71,7 @@ If, when you run the `.exe`, the window immediately closes please try running th
 
 ### Everything Else
 
-This project uses Python 3.4 and pipenv.
+This project uses Python 3.8 and pipenv.
 
 Python 3: https://www.python.org
 
